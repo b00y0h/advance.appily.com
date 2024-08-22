@@ -223,6 +223,7 @@ export const CAROUSELCARD = `
 
 export const TABSECTION = `
 ...on Tabsection {
+  id
   blockType
   tabSectionBackgroundColor
   sectionHead{
@@ -335,5 +336,25 @@ export const STICKYCTASECTION = `
   stickyctaLinks
   {
     link ${LINK_FIELDS()}
+  }
+}`
+
+export const GLOBAL_TOKEN= `
+...on GlobalBlock {
+  blockName
+  blockType
+  id
+  globalBlocks {
+    id
+    title
+    Block {
+      ${STATS}
+      ${TESTIMONIAL}
+      ${ACCORDIONBLOCK}
+      ${IMAGECARDBLOCK}
+      ${BUTTONGROUPBLOCK}
+      ${RICHTEXTBLOCK}
+      ${COMPARISONBLOCK}
+      }
   }
 }`
