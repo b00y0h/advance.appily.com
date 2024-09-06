@@ -36,11 +36,13 @@ export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata>
       ogParams.set('image', ogImageUrl);
       ogParams.set('title', doc.title);
       ogImage = `/api/og?${ogParams.toString()}`;
+      console.log("🚀🚀 ~ generateMeta ~ ogImage:", ogImage)
     }
   } else if (doc?.meta?.image && typeof doc.meta.image === 'object' && 'url' in doc.meta.image && doc.meta.image.url) {
     ogImage = doc.meta.image.url;
+    console.log("🚀🚀🚀 ~ generateMeta ~ ogImage:", ogImage)
   }
-  console.log("🚀🚀🚀 ~ generateMeta ~ ogImage:", ogImage)
+  console.log("🚀🚀🚀🚀 ~ generateMeta ~ ogImage:", ogImage)
 
   const title = doc?.meta?.title || '';
   const description = doc?.meta?.description || '';
