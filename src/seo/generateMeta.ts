@@ -29,6 +29,7 @@ function getOgImageUrl(doc: Post): string | undefined {
 
 export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata> => {
   const { doc } = args || {}
+  const baseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_CMS_URL;
 
   let ogImage: string | undefined;
 
@@ -39,7 +40,7 @@ export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata>
       const ogParams = new URLSearchParams();
       ogParams.set('image', ogImageUrl);
       ogParams.set('title', doc.title);
-      ogImage = `/api/og?${ogParams.toString()}`;
+      ogImage = `${baseUrl}/api/og?${ogParams.toString()}`;
       console.log("🚀🚀 ~ generateMeta ~ ogImage:", ogImage)
     }
   } else if (doc?.meta?.image && typeof doc.meta.image === 'object' && 'url' in doc.meta.image && doc.meta.image.url) {
