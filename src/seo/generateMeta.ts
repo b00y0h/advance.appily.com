@@ -1,36 +1,57 @@
 import type { Metadata } from 'next';
 
-import type { Page, Post } from '../../payload-types';
+import type { Media, Page, Post } from '../../payload-types';
 import { mergeOpenGraph } from './mergeOpenGraph';
 import { mergeTwitter } from './mergeTwitter';
 
 function isPost(doc: Page | Post): doc is Post {
-  return (doc as Post).postFeaturedImage !== undefined;
+  return 'postFeaturedImage' in doc;
 }
+
+function isMedia(image: string | Media): image is Media {
+  return typeof image === 'object' && image !== null && 'sizes' in image;
+}
+
+function getOgImageUrl(doc: Post): string | undefined {
+  if (!doc.postFeaturedImage) return undefined;
+
+  if (isMedia(doc.postFeaturedImage)) {
+    return doc.postFeaturedImage.sizes?.squareMedium?.url || undefined;
+  } else {
+    return doc.postFeaturedImage;
+  }
+}
+
 
 export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata> => {
   const { doc } = args || {}
 
   let ogImage: string | undefined;
 
-  if (isPost(doc) && doc.postFeaturedImage) {
-    const ogParams = new URLSearchParams();
-    ogParams.set('image', doc.postFeaturedImage.sizes.squareMedium.url);
-    ogParams.set('title', doc.title);
-    ogImage = `/api/og?${ogParams.toString()}`;
-    console.log("🚀 ~ generateMeta ~ ogImage:", ogImage)
-  } else if (doc?.meta?.image && typeof doc.meta.image === 'object' && 'url' in doc.meta.image) {
-    ogImage = `${doc.meta.image.url}`;
+  if (isPost(doc)) {
+    const ogImageUrl = getOgImageUrl(doc);
+    if (ogImageUrl) {
+      const ogParams = new URLSearchParams();
+      ogParams.set('image', ogImageUrl);
+      ogParams.set('title', doc.title);
+      ogImage = `/api/og?${ogParams.toString()}`;
+    }
+  } else if (doc?.meta?.image && typeof doc.meta.image === 'object' && 'url' in doc.meta.image && doc.meta.image.url) {
+    ogImage = doc.meta.image.url;
   }
 
+  const title = doc?.meta?.title || '';
+  const description = doc?.meta?.description || '';
+  const url = Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/';
+
   return {
-    title: doc?.meta?.title || '',
-    description: doc?.meta?.description,
+    title,
+    description,
     openGraph: mergeOpenGraph({
-      title: doc?.meta?.title || '',
-      description: doc?.meta?.description || '',
-      url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
-      images: ogImage
+      title,
+      description,
+      url,
+        images: ogImage
         ? [
             {
               url: ogImage,
@@ -39,8 +60,8 @@ export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata>
         : undefined,
     }),
     twitter: mergeTwitter({
-      title: doc?.meta?.title || '',
-      description: doc?.meta?.description || '',
+      title,
+      description,
       images: ogImage
         ? [
             {
