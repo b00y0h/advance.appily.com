@@ -26,10 +26,22 @@ function getOgImageUrl(doc: Post): string | undefined {
   }
 }
 
+const getBaseUrl = () => {
+  if (process.env.NODE_ENV === 'development') {
+    return 'http://localhost:3000';
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  return process.env.NEXT_PUBLIC_APP_URL;
+};
+
 
 export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata> => {
   const { doc } = args || {}
-  const baseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_CMS_URL;
+  const baseUrl = getBaseUrl();
 
   let ogImage: string | undefined;
 
