@@ -16,8 +16,10 @@ function getOgImageUrl(doc: Post): string | undefined {
   if (!doc.postFeaturedImage) return undefined;
 
   if (isMedia(doc.postFeaturedImage)) {
+    console.log("💰 ~ getOgImageUrl ~ doc.postFeaturedImage:", doc.postFeaturedImage)
     return doc.postFeaturedImage.sizes?.squareMedium?.url || undefined;
   } else {
+    console.log("💰💰 ~ getOgImageUrl ~ doc.postFeaturedImage:", doc.postFeaturedImage)
     return doc.postFeaturedImage;
   }
 }
