@@ -5,14 +5,16 @@ import { mergeOpenGraph } from './mergeOpenGraph';
 import { mergeTwitter } from './mergeTwitter';
 
 function isPost(doc: Page | Post): doc is Post {
-  return 'postFeaturedImage' in doc;
+  return (doc as Post).postFeaturedImage !== undefined;
 }
 
 function isMedia(image: string | Media): image is Media {
   return typeof image === 'object' && image !== null && 'sizes' in image;
 }
 
+
 function getOgImageUrl(doc: Post): string | undefined {
+  console.log("💩 ~ getOgImageUrl ~ doc.postFeaturedImage:", doc.postFeaturedImage)
   if (!doc.postFeaturedImage) return undefined;
 
   if (isMedia(doc.postFeaturedImage)) {
