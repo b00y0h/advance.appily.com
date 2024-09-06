@@ -4,8 +4,10 @@ import type { Media, Page, Post } from '../../payload-types';
 import { mergeOpenGraph } from './mergeOpenGraph';
 import { mergeTwitter } from './mergeTwitter';
 
-function isPost(doc: Page | Post): doc is Post {
-  return (doc as Post).postFeaturedImage !== undefined;
+function hasFeaturedImage(doc: Page | Post): doc is Post {
+  const result = 'postFeaturedImage' in doc;
+  console.log("🚀 ~ hasFeaturedImage ~ result:", result)
+  return result;
 }
 
 function isMedia(image: string | Media): image is Media {
@@ -45,7 +47,7 @@ export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata>
 
   let ogImage: string | undefined;
 
-  if (isPost(doc)) {
+  if (hasFeaturedImage(doc)) {
     const ogImageUrl = getOgImageUrl(doc);
     console.log("🚀 ~ generateMeta ~ ogImageUrl:", ogImageUrl)
     if (ogImageUrl) {
