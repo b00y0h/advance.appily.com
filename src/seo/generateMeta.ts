@@ -40,6 +40,7 @@ export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata>
   } else if (doc?.meta?.image && typeof doc.meta.image === 'object' && 'url' in doc.meta.image && doc.meta.image.url) {
     ogImage = doc.meta.image.url;
   }
+  console.log("🚀🚀🚀 ~ generateMeta ~ ogImage:", ogImage)
 
   const title = doc?.meta?.title || '';
   const description = doc?.meta?.description || '';
