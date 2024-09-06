@@ -11,9 +11,11 @@ export async function GET(request: Request) {
   const title = hasTitle
     ? searchParams.get("title")?.slice(0, 100)
     : "Appily Advance";
+  console.log("🚀 ~ GET ~ title:", title);
 
   const hasImage = searchParams.has("image");
   const image = hasImage ? searchParams.get("image") : null;
+  console.log("🚀 ~ GET ~ image:", image);
 
   try {
     return new ImageResponse(

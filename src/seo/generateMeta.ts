@@ -30,6 +30,7 @@ export const generateMeta = async (args: { doc: Page | Post}): Promise<Metadata>
 
   if (isPost(doc)) {
     const ogImageUrl = getOgImageUrl(doc);
+    console.log("🚀 ~ generateMeta ~ ogImageUrl:", ogImageUrl)
     if (ogImageUrl) {
       const ogParams = new URLSearchParams();
       ogParams.set('image', ogImageUrl);
