@@ -8,7 +8,7 @@ First you'll need an instance of our [Payload CMS](https://github.com/eab-agency
 
 ### Next.js App Setup
 
-Get your environment setup:
+Get your environment setup correctly:
 
 1. First copy the example `.env` file as your own:
 
