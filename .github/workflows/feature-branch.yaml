@@ -5,13 +5,7 @@ on:
     branches:
       - "feature/*"
       - "feature-*"
-    paths:
-      - "src/**"
-      - "*.json"
-      - "*.yaml"
-      - "*.json"
-      - "*.config.js"
-      - "*.config.ts"
+  workflow_dispatch:
 
 jobs:
   deploy:
